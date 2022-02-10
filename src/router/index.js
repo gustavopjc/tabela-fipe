@@ -11,11 +11,6 @@ const routes = [
     name: 'Home',
     component: ConsultaFipe
   },
-  {
-    path: '/teste',
-    name: 'Teste',
-    component: Teste
-  },
 ]
 
 const router = new VueRouter({
