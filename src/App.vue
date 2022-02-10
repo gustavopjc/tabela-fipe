@@ -15,18 +15,6 @@
           width="70"
         />
       </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-        color="primary"
-      >
-        <span class="mr-2">Realiza nova consulta</span>
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
     </v-app-bar>
 
     <v-main>

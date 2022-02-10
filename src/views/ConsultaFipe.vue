@@ -6,35 +6,39 @@
         md="4"
         class="text-center text-xs-center"
       >
-        <v-autocomplete
+        <v-select
           filled
           v-model="selectedCategory"
           item-text="title"
           item-value="value"
           :items="categories"
           @change="updateBrands()"
-        ></v-autocomplete>
+        ></v-select>
 
 
-        <v-autocomplete
+        <v-select
           filled
           v-model="selectedBrand"
           :loading="isLoadingBrands"
+          :disabled="brands.length === 0"
           :items="brands"
           item-text="nome"
           item-value="codigo"
-        ></v-autocomplete>
+        ></v-select>
+        <div>
 
-        <v-btn color="primary" class="float-left" dark @click.native="clearForm()">Limpar dados</v-btn>
-        <v-btn color="primary" 
-          class="float-right" 
-          dark @click.native="showModelDataTable = true"
-          :disabled="!this.selectedBrand || !this.selectedCategory"
-        >
-          Consultar
-        </v-btn>
-
-      </v-col>
+        </div>
+        <div class="form-buttons">
+          <v-btn color="primary" class="float-left" dark @click.native="clearForm()">Limpar dados</v-btn>
+          <v-btn color="primary" 
+            class="float-right" 
+            dark @click.native="showModelDataTable = true"
+            :disabled="!this.selectedBrand || !this.selectedCategory"
+          >
+            Consultar
+          </v-btn>
+        </div>
+              </v-col>
       <v-col cols="12" md="8" class="pl-8">
         <models-data-table :selectedCategory="selectedCategory" :selectedBrand="selectedBrand" v-if="showModelDataTable">
         </models-data-table>
@@ -73,8 +77,7 @@ import ModelsDataTable from '@/components/fipe-steps/ModelsDataTable.vue'
         this.isLoadingBrands = false
       },
       clearCategory() {
-        this.categories = []
-        this.categorySelected = null
+        this.selectedCategory = null
       },
       clearBrand(){
         this.brands = []
@@ -82,7 +85,7 @@ import ModelsDataTable from '@/components/fipe-steps/ModelsDataTable.vue'
       },
       clearForm() {
         this.clearCategory()
-        this.clearBrand()
+        this.updateBrands()
       },
       async updateBrands() {
         this.showModelDataTable = false
@@ -95,3 +98,9 @@ import ModelsDataTable from '@/components/fipe-steps/ModelsDataTable.vue'
     }
   }
 </script>
+<style scoped>
+.form-buttons >>> .theme--dark.v-btn.v-btn--disabled.v-btn--has-bg {
+  background-color: rgb(177, 177, 177) !important;
+  cursor: not-allowed !important;
+} 
+</style>

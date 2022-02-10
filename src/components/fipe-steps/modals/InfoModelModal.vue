@@ -1,31 +1,54 @@
 <template>
   <v-dialog
     v-model="selectedModel"
-    scrollable 
-    persistent
     max-width="600px"
+    persistent
     transition="dialog-transition"
   >
     <v-card>
+        <v-icon class="float-right mr-2 mt-2" @click="$emit('close')">mdi-close</v-icon>
         <v-card-title>Informações do modelo</v-card-title>
         <v-divider></v-divider>
-        <v-card-text style="height: 500px;" class="mt-4">
-          <v-tabs
-            dark
-            background-color="teal darken-3"
-            show-arrows
-          >
-            <v-tabs-slider color="teal lighten-3"></v-tabs-slider>
-
-            <v-tab
-              v-for="year in years"
-              :key="year.codigo"
-              @click.native="fetchModelInfo(year.codigo)"
+        <v-card-text  class="mt-4">
+          <div class="tabs">
+            <div class="d-flex row" v-if="isLoadingTabs">
+              <v-skeleton-loader
+                v-for="n in 7"
+                :key="n"
+                type="button"
+                class="ma-2"
+              ></v-skeleton-loader>
+            </div>
+            <v-tabs
+              v-else
+              v-model="tabSelected"
+              dark
+              background-color="teal darken-3"
+              show-arrows
             >
-              {{ year.nome }}
-            </v-tab>
-          </v-tabs>
-          teste sla
+              <v-tabs-slider color="teal lighten-3"></v-tabs-slider>
+
+              <v-tab
+                v-for="year in years"
+                :key="year.codigo"
+              >
+                {{ year.nome }}
+              </v-tab>
+            </v-tabs>
+          </div>
+          <div class="content" v-if="yearSelected">
+            <div v-if="isLoadingContent">
+              <v-skeleton-loader
+                v-for="n in 2"
+                :key="n"
+                type="article"
+              ></v-skeleton-loader>
+            </div>
+            <div v-else>
+              <vehicle-info :vehicleInfo="vehicleInfo">
+              </vehicle-info>
+            </div>
+          </div>
         </v-card-text>
       </v-card>
   </v-dialog>
@@ -33,29 +56,51 @@
 
 <script>
 import BaseService from '@/services/BaseService'
+import VehicleInfo from '../components/VehicleInfo';
 
 export default {
   name: 'InfoModelModal',
   props: ['selectedModel', 'selectedBrand', 'selectedCategory'],
+  components: {
+    VehicleInfo
+  },
   data() {
     return {
-      isLoading: false,
+      isLoadingTabs: false,
+      isLoadingContent: false,
+      vehicleInfo: null,
+      tabSelected: null,
       years: []
     }
   },
   computed: {
     baseUrl() {
       return this.selectedCategory + '/marcas/' + this.selectedBrand + '/modelos/' + this.selectedModel + '/anos'
+    },
+    yearSelected() {
+      return this.tabSelected !== -1 ? this.years[this.tabSelected] : null
+    }
+  },
+  watch: {
+    tabSelected: {
+      immediate: true,
+      handler() {
+        if(this.yearSelected) {
+          this.fetchModelInfo()
+        }
+      }
     }
   },
   methods: {
     async fetchYearsByModel() {
-      this.isLoading = true
+      this.isLoadingTabs = true
       this.years = await BaseService.get(this.baseUrl)
-      this.isLoading = false
+      this.isLoadingTabs = false
     },
-    fetchModelInfo(item) {
-      console.log(item)
+    async fetchModelInfo() {
+      this.isLoadingContent = true
+      this.vehicleInfo = await BaseService.get(this.baseUrl + '/' + this.yearSelected.codigo)
+      this.isLoadingContent = false
     }
   },
   mounted() {

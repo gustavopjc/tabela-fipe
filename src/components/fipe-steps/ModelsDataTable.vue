@@ -16,26 +16,35 @@
                 type="table"
             ></v-skeleton-loader>
         </div>
-        <v-data-table
-            v-else
-            :headers="headers"
-            item-key="nome"
-            :items="models"
-            :items-per-page="6"
-            class="elevation-1"
-            :footer-props="{
-                showFirstLastPage: true,
-                'items-per-page-text':'Marcas por página',
-                'items-per-page-all-text':'Todas',
-                
-            }"
-        >
-            <template v-slot:item.actions="{ item }">
-                <div @click="selectedModel = item.codigo">
-                    <a >Ver anos disponíveis</a>
-                </div>
-            </template>
-        </v-data-table>
+        <div v-else>
+            <v-text-field
+                filled label="Busque por um modelo..." 
+                v-model="searchModel"
+                append-icon="mdi-magnify"
+                @input="filterModels()"
+            ></v-text-field>
+            <v-data-table
+                no-data-text="Nenhum modelo encontrado"
+                :headers="headers"
+                item-key="nome"
+                :items="filteredModels"
+                :items-per-page="6"
+                class="elevation-1"
+                :footer-props="{
+                    showFirstLastPage: true,
+                    'items-per-page-text':'Modelos por página',
+                    'items-per-page-all-text':'Todas',
+                    
+                }"
+            >
+                <template v-slot:item.actions="{ item }">
+                    <div @click="selectedModel = item.codigo">
+                        <a >Ver anos disponíveis</a>
+                    </div>
+                </template>
+            </v-data-table>
+        </div>
+        
         
     </div>
 </template>
@@ -45,38 +54,48 @@ import BaseService from '@/services/BaseService'
 import InfoModelModal from './modals/InfoModelModal.vue';
 
 export default {
-  components: { InfoModelModal },
-  name: 'ModelsDataTable',
-  props: {
-      selectedBrand: {
-          required: true,
-      },
-      selectedCategory: {
-          required: true,
-      },
-  },
-  data() {
-      return {
-          headers: [
-              { text: '# Código', value: 'codigo' },
-              { text: 'Modelo', value: 'nome' },
-              { text: 'Ação', value: 'actions' },
-          ],
-          models: [],
-          isLoading: true,
-          selectedModel: null,
-      };
-  },
-  methods: {
-      async fetchModels() {
-          this.isLoading = true
-          this.models = (await BaseService.get(this.selectedCategory + '/marcas/' + this.selectedBrand + '/modelos')).modelos
-          this.isLoading = false
-      }
-  },
-  mounted() {
-      this.fetchModels();
-  },
+    components: { InfoModelModal },
+    name: 'ModelsDataTable',
+    props: {
+        selectedBrand: {
+            required: true,
+        },
+        selectedCategory: {
+            required: true,
+        },
+    },
+        data() {
+        return {
+            headers: [
+                { text: '# Código', value: 'codigo' },
+                { text: 'Modelo', value: 'nome' },
+                { text: 'Ação', value: 'actions' },
+            ],
+            allModels: [],
+            filteredModels: [],
+            isLoading: true,
+            selectedModel: null,
+            searchModel: null
+        };
+    },
+    methods: {
+        async fetchModels() {
+            this.isLoading = true
+            this.models = (await BaseService.get(this.selectedCategory + '/marcas/' + this.selectedBrand + '/modelos')).modelos
+            this.filteredModels = this.models
+            this.isLoading = false
+        },
+        filterModels() {
+            if(this.filteredModels) {
+                this.filteredModels = this.models.filter(element => element.nome.toLowerCase().includes(this.searchModel.toLowerCase()))
+            } else {
+                this.filteredModels = this.models
+            }            
+        }
+    },
+    mounted() {
+        this.fetchModels();
+    },
 }
 </script>
 
