@@ -96,6 +96,11 @@ export default {
     mounted() {
         this.fetchModels();
     },
+    watch: {
+        selectedBrand() {
+            this.fetchModels()
+        }
+    }
 }
 </script>
 
