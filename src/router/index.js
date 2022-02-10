@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import ConsultaFipe from '../views/ConsultaFipe.vue'
-import Teste from '../views/Teste.vue'
 
 Vue.use(VueRouter)
 
