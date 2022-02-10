@@ -49,7 +49,7 @@
 
 <script>
 import BaseService from '@/services/BaseService';
-import ModelsDataTable from '@/components/fipe-steps/ModelsDataTable.vue'
+import ModelsDataTable from '@/components/tabela-fipe/ModelsDataTable.vue'
 
   export default {
     name: 'Home',
