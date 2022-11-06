@@ -6,7 +6,7 @@ on:
 jobs:
   autoapprove:
     runs-on: ubuntu-latest
-    name: Auto Approve a PR by dependabot
+    name: Auto Approve a PR
     permissions:
       pull-requests: write
     steps:
