@@ -12,7 +12,8 @@ jobs:
     permissions:
       pull-requests: write
     steps:
+      - run: echo "hello world" # run the `echo` command
       - name: Auto approve
         uses: hmarr/auto-approve-action@v3
         with:
-          github-token: ${{secrets.AUTO_APPROVE_TOKEN}}
+          github-token: ${{ secrets.AUTO_APPROVE_TOKEN }}
