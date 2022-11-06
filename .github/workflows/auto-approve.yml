@@ -1,18 +1,16 @@
-name: Auto approve and merge PRs by dependabot
+name: Sync DependaBot to Main
 
-# Trigger the workflow on pull request
 on:
   pull_request:
     branches:
-      - 'infra/dependabot'
+      - infra/dependabot
 
 jobs:
   autoapprove:
-    name: Auto Approve a PR by dependabot # Name of the job
-      runs-on: ubuntu-latest # Environment on which the job runs
-      steps:
-        - name: Auto approve
-          uses: hmarr/auto-approve-action@v3 # Custom action for auto approval already available on marketplace
-          # Perform the auto approve action only when the PR is raised by dependabot
-          with:
-            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    runs-on: ubuntu-latest
+    name: Auto Approve a PR by dependabot
+    steps:
+      - name: Auto approve
+        uses: hmarr/auto-approve-action@v3
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
