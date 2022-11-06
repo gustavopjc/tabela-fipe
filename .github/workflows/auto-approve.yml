@@ -1,0 +1,16 @@
+name: Sync DependaBot to Main
+
+on:
+  pull_request:
+    branches:
+      - infra/dependabot
+
+jobs:
+  autoapprove:
+    runs-on: ubuntu-latest
+    name: Auto Approve a PR by dependabot
+    steps:
+      - name: Auto approve
+        uses: hmarr/auto-approve-action@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
