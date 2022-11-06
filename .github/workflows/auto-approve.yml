@@ -11,11 +11,11 @@ jobs:
     name: Auto Approve a PR by dependabot # Name of the job
     runs-on: ubuntu-latest # Environment on which the job runs
     steps:
-      - uses: hmarr/auto-approve-action@v3
+       - uses: hmarr/auto-approve-action@v3
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - run: npm ci
       - name: Pull request number
         run: |
           echo "Oiiiiiiii"
-      with:
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
