@@ -11,9 +11,8 @@ jobs:
     name: Auto Approve a PR by dependabot # Name of the job
     runs-on: ubuntu-latest # Environment on which the job runs
     steps:
-      - uses: actions/checkout@v3
-        with:
-        
+      - uses: hmarr/auto-approve-action@v3
+
       - run: npm ci
       - name: Pull request number
         run: |
