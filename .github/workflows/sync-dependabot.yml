@@ -3,7 +3,7 @@ name: Sync DependaBot to Main
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   sync-branches:
