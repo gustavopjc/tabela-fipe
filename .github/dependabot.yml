@@ -1,0 +1,9 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    target-branch: "infra/dependabot"
+    schedule:
+      interval: "weekly"
+      time: "00:00"
+      timezone: "America/Sao_Paulo"
